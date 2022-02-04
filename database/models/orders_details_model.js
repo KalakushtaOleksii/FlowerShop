@@ -24,7 +24,7 @@ const OrdersDetails = sequelize.define('OrdersDetails',{
     },
     {
         schema: 'FlowerShop',
-        tableName: 'orders_details_1',
+        tableName: 'orders_details',
         timestamps: false,
     }
 )

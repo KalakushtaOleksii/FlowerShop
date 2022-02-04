@@ -1,3 +1,5 @@
-const { syncDB } = require('./database/sync')
+const { syncDB, setTestDate } = require('./database/sync')
 
-syncDB()
+syncDB().then(() => {
+    setTestDate()
+})

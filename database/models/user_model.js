@@ -23,7 +23,7 @@ const User = sequelize.define('User',{
     },
     {
         schema: 'FlowerShop',
-        tableName: 'users_1',
+        tableName: 'users',
         timestamps: false,
     }
 )

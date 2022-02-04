@@ -24,7 +24,7 @@ const Flower = sequelize.define('Flower',{
 },
     {
         schema: 'FlowerShop',
-        tableName: 'flowers_1',
+        tableName: 'flowers',
         timestamps: false,
     }
 )

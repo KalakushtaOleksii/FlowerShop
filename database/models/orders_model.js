@@ -20,7 +20,7 @@ const Order = sequelize.define('Order',{
     },
     {
         schema: 'FlowerShop',
-        tableName: 'orders_1',
+        tableName: 'orders',
         timestamps: false,
     }
 )
