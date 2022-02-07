@@ -3,6 +3,8 @@ const FlowerColor = require ('./models/flower_color_model')
 const User = require('./models/user_model')
 const Order = require('./models/orders_model')
 const OrdersDetails = require('./models/orders_details_model')
+const { sequelize } = require('../database')
+const { QueryTypes } = require('sequelize')
 
 function syncDB () {
   return   Promise.all([
@@ -13,6 +15,40 @@ function syncDB () {
         OrdersDetails.sync()
     ])
 }
+
+async function getModelsThatDontExist() {
+    const modelsThatDoesNotExist = []
+    const modelList = [
+        Flower,
+        User,
+        FlowerColor,
+        Order,
+        OrdersDetails,
+    ]
+
+    for (const model of modelList) {
+        const tableDate = model.getTableName()
+
+
+        try {
+            await sequelize.query(`SELECT 1 + 1 as result FROM ${tableDate.schema}${tableDate.delimiter}${tableDate.tableName}`,
+                {
+                    type: QueryTypes.SELECT,
+                },
+            )
+        } catch (e) {
+            if (e.name === 'SequelizeDatabaseError') {
+                modelsThatDoesNotExist.push(model)
+            } else {
+                throw e
+            }
+        }
+
+    }
+    return modelsThatDoesNotExist
+}
+
+
 function setFlowersTestDate(){
     Flower.create({
         title: 'Roza',
@@ -111,14 +147,25 @@ function setOrdersDetalisTestDateb (){
 
 
 
-function setTestDate(){
-    setFlowersTestDate()
-    setUsersTestDate()
-    setFlowerColorsTestDate()
-    setOrdersTestDate()
-    setOrdersDetalisTestDateb()
+function setTestDate(modeList){
+    const modelToTestDateMap = new Map([
+        [Flower, setFlowersTestDate],
+        [FlowerColor, setFlowerColorsTestDate],
+        [User, setUsersTestDate],
+        [Order, setOrdersTestDate],
+        [OrdersDetails, setOrdersDetalisTestDateb]
+    ])
+
+    modelToTestDateMap.forEach(setTestDateFunction, model) => {
+        if (modeList.includes(model)){
+            setTestDateFunction()
+        }
+    }
 }
+
+
 module.exports = {
     syncDB,
     setTestDate,
+    getModelsThatDontExist,
 }

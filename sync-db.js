@@ -1,5 +1,7 @@
-const { syncDB, setTestDate } = require('./database/sync')
+const { syncDB, setTestDate, getModelsThatDontExist } = require('./database/sync')
 
-syncDB().then(() => {
-    setTestDate()
-})
+getModelsThatDontExist().then(console.log)
+
+// syncDB().then(() => {
+//      setTestDate()
+// })
